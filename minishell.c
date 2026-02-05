@@ -39,34 +39,40 @@ int main(){
         int auxiliary_var_index = 0;
         int args_index = -1; 
         int i = 0;
-        while(instruction[i] != ' '){
-            auxiliary_var[auxiliary_var_index] = instruction[i];
-            auxiliary_var_index++;
-            i++;
+        while(i < size){
+            while(instruction[i] == ' '){
+                i++;
+            }
+            while(instruction[i] != ' '){
+                auxiliary_var[auxiliary_var_index] = instruction[i];
+                auxiliary_var_index++;
+                i++;
+            }
+            auxiliary_var[auxiliary_var_index] = '\0';
+            if(args_index < 0){
+                strcpy(my_token.command, auxiliary_var);
+            }
+            else{
+                my_token.args[args_index] = malloc(sizeof(auxiliary_var));
+                strcpy(my_token.args[args_index], auxiliary_var);
+            }
+            auxiliary_var[0] = '\0';            
+            auxiliary_var_index = 0;
+            args_index++;
+            while(instruction[i] == ' '){
+                i++;
+            }
         }
-        auxiliary_var[auxiliary_var_index] = '\0';
-        if(args_index < 0){
-            strcpy(my_token.command, auxiliary_var);
-        }
-        else{
-            my_token.args[args_index] = malloc(sizeof(auxiliary_var));
-            strcpy(my_token.args[args_index], auxiliary_var);
-        }
-        auxiliary_var[0] = '\0';            
-        auxiliary_var_index = 0;
-        args_index++;
-        while(instruction[i] == ' '){
-            i++;
-        }
+        my_token.args[args_index] = NULL;
         
         //the important part
         pid_t pid = fork(); //again, here it shows error squiggles, but it does not bug during the compilation
         if(pid == 0){
-            printf("hello, i am the child process\n");
-            // the exec() stuff
+            execvp(my_token.command, my_token.args);
+            perror("problem with the execution");
+            exit(127);
         }
         else{
-            printf("i am the parent process, i wait for my child to finish...\n");
             wait(NULL);
         }
 
@@ -77,25 +83,3 @@ int main(){
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-/*      char buffer;
-        printf("user : ");
-        fflush(stdout);
-        buffer = getchar();
-        char* instruction = malloc(MAX_INSTRUCTION_SIZE * sizeof(char));
-        for(int i = 0; (i < MAX_INSTRUCTION_SIZE) && buffer != '\n'; i++){
-         instruction[i] = buffer;
-            buffer = getchar();
-        }
-        if(strcmp instruction, "exit") == 0){
-            break;
-        }
-        system instruction);
-        printf("\n");    */
