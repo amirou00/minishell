@@ -39,11 +39,11 @@ int main(){
         int auxiliary_var_index = 0;
         int args_index = -1; 
         int i = 0;
-        while(i < size){
+        while(instruction[i] != '\0'){
             while(instruction[i] == ' '){
                 i++;
             }
-            while(instruction[i] != ' '){
+            while(instruction[i] != ' ' && instruction[i] != '\0'){
                 auxiliary_var[auxiliary_var_index] = instruction[i];
                 auxiliary_var_index++;
                 i++;
@@ -51,10 +51,13 @@ int main(){
             auxiliary_var[auxiliary_var_index] = '\0';
             if(args_index < 0){
                 strcpy(my_token.command, auxiliary_var);
+                args_index++;
+                my_token.args[args_index] = malloc(sizeof(auxiliary_var)); // note sure..
+                strcpy(my_token.args[args_index], auxiliary_var);
             }
             else{
-                my_token.args[args_index] = malloc(sizeof(auxiliary_var));
-                strcpy(my_token.args[args_index], auxiliary_var);
+                my_token.args[args_index] = malloc(sizeof(auxiliary_var)); // note sure..
+                strcpy(my_token.args[args_index], auxiliary_var); 
             }
             auxiliary_var[0] = '\0';            
             auxiliary_var_index = 0;
@@ -74,6 +77,7 @@ int main(){
         }
         else{
             wait(NULL);
+            printf("\n");
         }
 
         // !!! do not forget to free*
