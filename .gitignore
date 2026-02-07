@@ -56,3 +56,5 @@ dkms.conf
 
 #project_specific_ignores
 .vscode
+main.ob
+minishell.o
